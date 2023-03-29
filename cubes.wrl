@@ -1,0 +1,54 @@
+#VRML V2.0 utf8
+
+PROTO KUBUS [field SFVec3f translation 0 0 0 field SFColor color 1 0 0] {
+Transform { 
+   translation IS translation
+   children [
+      Shape{geometry Box { size 0.9 0.9 0.9 } appearance Appearance{ material Material { diffuseColor IS color               }}}
+      Shape{geometry Box { size 1.0 1.0 1.0 } appearance Appearance{ material Material { diffuseColor 1 1 1 transparency 0.4 }}}
+   ]
+}}
+
+DEF GROUP Transform {
+   children [
+      KUBUS { translation 0 0 0 color 1 0 0}
+      KUBUS { translation 0 0 1 color 1 0 0}
+      KUBUS { translation 1 0 0 color 1 0 0}
+      KUBUS { translation 1 1 0 color 1 0 0}
+      KUBUS { translation 2 0 0 color 1 0 0}
+      KUBUS { translation 2 0 1 color 1 0 0}
+]
+}
+
+# some fancy stuff
+Background {
+    skyColor [
+        0.0 0.2 0.7,
+        0.0 0.5 1.0,
+        1.0 1.0 1.0
+    ]
+    skyAngle [ 1.309, 1.571 ]
+    groundColor [
+        0.1 0.10 0.0,
+        0.4 0.25 0.2,
+        0.6 0.60 0.6,
+    ]
+    groundAngle [ 1.309, 1.571 ]
+}
+
+ # Animation clock
+        DEF Clock TimeSensor {
+            cycleInterval 4.0
+            loop TRUE
+        },
+    # Animation path
+        DEF ColumnPath OrientationInterpolator {
+            key [ 0.0, 0.50, 1.0 ]
+            keyValue [
+                0.0 1.0 1.0  0.0,
+                0.0 1.0 1.0  3.14,
+                0.0 1.0 1.0  6.28
+            ]
+        }
+ROUTE Clock.fraction_changed   TO ColumnPath.set_fraction
+ROUTE ColumnPath.value_changed TO GROUP.set_rotation
