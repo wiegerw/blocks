@@ -2,6 +2,7 @@
 
 import argparse
 import itertools
+import math
 from pathlib import Path
 from typing import List, Tuple
 
@@ -144,12 +145,13 @@ Transform {
     (min_x, min_y, min_z), (max_x, max_y, max_z) = bounding_box(pieces)
     size_x = max_x - min_x + 2
     size_y = max_y - min_y + 2
+    N = round(math.sqrt(len(pieces)))
 
     def piece(i: int) -> str:
         name = f'BLOCK{i}'
         piece = pieces[i]
         color = colors[i % len(colors)]
-        translation = (size_x * (i % 4), size_y * (i // 4), 0)
+        translation = (size_x * (i % N), size_y * (i // N), 0)
         return make_piece(name, piece, color, translation)
 
     return text + '\n\n'.join([piece(i) for i in range(len(pieces))])
