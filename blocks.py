@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 
 import argparse
+import itertools
 from pathlib import Path
 from typing import List, Tuple
+
 
 # type definitions
 Position = Tuple[int, int, int]
 Piece = List[Position]
 RGB = Tuple[float, float, float]
+
 
 COLORS = '''
 166,206,227
@@ -106,16 +109,22 @@ def make_piece(name: str, piece: Piece, color: RGB, translation: Position) -> st
     return text
 
 
-def bounding_box(pieces: List[Piece]) -> Tuple[int, int, int]:
+def bounding_box(pieces: List[Piece]) -> Tuple[Position, Position]:
+    min_x = 0
+    min_y = 0
+    min_z = 0
     max_x = 0
     max_y = 0
     max_z = 0
     for piece in pieces:
         for (x, y, z) in piece:
+            min_x = min(x, min_x)
+            min_y = min(y, min_y)
+            min_z = min(z, min_z)
             max_x = max(x, max_x)
             max_y = max(y, max_y)
             max_z = max(z, max_z)
-    return max_x, max_y, max_z
+    return (min_x, min_y, min_z), (max_x, max_y, max_z)
 
 
 def make_vrml(pieces: List[Piece], colors: List[RGB]) -> str:
@@ -132,9 +141,9 @@ Transform {
 
 '''
 
-    size_x, size_y, size_z = bounding_box(pieces)
-    size_x += 2
-    size_y += 2
+    (min_x, min_y, min_z), (max_x, max_y, max_z) = bounding_box(pieces)
+    size_x = max_x - min_x + 2
+    size_y = max_y - min_y + 2
 
     def piece(i: int) -> str:
         name = f'BLOCK{i}'
@@ -150,6 +159,285 @@ def cube_positions(X: int, Y: int, Z: int) -> List[Position]:
     return [(x, y, z) for x in range(X) for y in range(Y) for z in range(Z)]
 
 
+def translate_object(obj: List[Position], translation: Position) -> List[Position]:
+    """
+    Translates the given object by the given amount in each dimension.
+
+    Args:
+        obj: The object to be translated, given as a list of 3D points with integer coordinates.
+        translation: The translation vector.
+
+    Returns:
+        A new list of 3D points representing the translated object.
+    """
+    dx, dy, dz = translation
+    return [(x+dx, y+dy, z+dz) for (x, y, z) in obj]
+
+
+def is_inside_bbox(point: Position, bboxmin: Position, bboxmax: Position) -> bool:
+    """
+    Determines whether the given point is inside the given bounding box.
+
+    Args:
+        point: The point to check, given as a 3D point with integer coordinates.
+        bboxmin: The minimum corner of the bounding box, given as a 3D point with integer coordinates.
+        bboxmax: The maximum corner of the bounding box, given as a 3D point with integer coordinates.
+
+    Returns:
+        True if the point is inside the bounding box, False otherwise.
+    """
+    return (bboxmin[0] <= point[0] <= bboxmax[0] and
+            bboxmin[1] <= point[1] <= bboxmax[1] and
+            bboxmin[2] <= point[2] <= bboxmax[2])
+
+
+def unique_orientations(pieces: List[Piece]) -> List[Piece]:
+    piece_tuples = set([tuple(sorted(piece)) for piece in pieces])
+    return [list(piece) for piece in piece_tuples]
+
+
+class Transformation(object):
+    def __call__(self, p: Position) -> Position:
+        raise NotImplementedError
+
+
+class Translation(object):
+    def __init__(self, translation: Position):
+        self.translation = translation
+
+    def __call__(self, p: Position) -> Position:
+        x, y, z = self.translation
+        return p[0] + x, p[1] + y, p[2] + z
+
+class Rotation1(Transformation):
+    def __call__(self, p: Position) -> Position:
+        x, y, z = p
+        return -x, -y, z
+
+
+class Rotation2(Transformation):
+    def __call__(self, p: Position) -> Position:
+        x, y, z = p
+        return -x, y, -z
+
+
+class Rotation3(Transformation):
+    def __call__(self, p: Position) -> Position:
+        x, y, z = p
+        return x, -y, -z
+
+
+class Rotation4(Transformation):
+    def __call__(self, p: Position) -> Position:
+        x, y, z = p
+        return x, y, z
+
+
+class Rotation5(Transformation):
+    def __call__(self, p: Position) -> Position:
+        x, y, z = p
+        return -x, -z, -y
+
+
+class Rotation6(Transformation):
+    def __call__(self, p: Position) -> Position:
+        x, y, z = p
+        return -x, z, y
+
+
+class Rotation7(Transformation):
+    def __call__(self, p: Position) -> Position:
+        x, y, z = p
+        return x, -z, y
+
+
+class Rotation8(Transformation):
+    def __call__(self, p: Position) -> Position:
+        x, y, z = p
+        return x, z, -y
+
+
+class Rotation9(Transformation):
+    def __call__(self, p: Position) -> Position:
+        x, y, z = p
+        return -y, -x, z
+
+
+class Rotation10(Transformation):
+    def __call__(self, p: Position) -> Position:
+        x, y, z = p
+        return -y, x, -z
+
+
+class Rotation11(Transformation):
+    def __call__(self, p: Position) -> Position:
+        x, y, z = p
+        return y, -x, -z
+
+
+class Rotation12(Transformation):
+    def __call__(self, p: Position) -> Position:
+        x, y, z = p
+        return y, x, z
+
+
+class Rotation13(Transformation):
+    def __call__(self, p: Position) -> Position:
+        x, y, z = p
+        return -y, -z, -x
+
+
+class Rotation14(Transformation):
+    def __call__(self, p: Position) -> Position:
+        x, y, z = p
+        return -y, z, x
+
+
+class Rotation15(Transformation):
+    def __call__(self, p: Position) -> Position:
+        x, y, z = p
+        return y, -z, x
+
+
+class Rotation16(Transformation):
+    def __call__(self, p: Position) -> Position:
+        x, y, z = p
+        return y, z, -x
+
+
+class Rotation17(Transformation):
+    def __call__(self, p: Position) -> Position:
+        x, y, z = p
+        return -z, -x, -y
+
+
+class Rotation18(Transformation):
+    def __call__(self, p: Position) -> Position:
+        x, y, z = p
+        return -z, x, y
+
+
+class Rotation19(Transformation):
+    def __call__(self, p: Position) -> Position:
+        x, y, z = p
+        return z, -x, y
+
+
+class Rotation20(Transformation):
+    def __call__(self, p: Position) -> Position:
+        x, y, z = p
+        return z, x, -y
+
+
+class Rotation21(Transformation):
+    def __call__(self, p: Position) -> Position:
+        x, y, z = p
+        return -z, -y, x
+
+
+class Rotation22(Transformation):
+    def __call__(self, p: Position) -> Position:
+        x, y, z = p
+        return -z, y, -x
+
+
+class Rotation23(Transformation):
+    def __call__(self, p: Position) -> Position:
+        x, y, z = p
+        return z, -y, -x
+
+
+class Rotation24(Transformation):
+    def __call__(self, p: Position) -> Position:
+        x, y, z = p
+        return z, y, x
+
+
+def rotation_group() -> List[Transformation]:
+    return [Rotation1(),
+            Rotation2(),
+            Rotation3(),
+            Rotation4(),
+            Rotation5(),
+            Rotation6(),
+            Rotation7(),
+            Rotation8(),
+            Rotation9(),
+            Rotation10(),
+            Rotation11(),
+            Rotation12(),
+            Rotation13(),
+            Rotation14(),
+            Rotation15(),
+            Rotation16(),
+            Rotation17(),
+            Rotation18(),
+            Rotation19(),
+            Rotation20(),
+            Rotation21(),
+            Rotation22(),
+            Rotation23(),
+            Rotation24()]
+
+
+def move_to_origin(piece: Piece) -> Piece:
+    bmin, bmax = bounding_box([piece])
+    x, y, z = bmin
+    translate = Translation((-x, -y, -z))
+    return list(sorted([translate(pos) for pos in piece]))
+
+
+def rotated_pieces(piece: Piece) -> List[Piece]:
+    pieces = [[rotate(pos) for pos in piece] for rotate in rotation_group()]
+    pieces = [move_to_origin(piece) for piece in pieces]
+    piece_tuples = set(tuple(piece) for piece in pieces)
+    pieces = [list(piece) for piece in piece_tuples]
+    return pieces
+
+
+def is_sub_piece(piece: Piece, goal: Piece):
+    """
+    Returns true if piece is contained in goal
+    """
+    return all(p in goal for p in piece)
+
+
+def find_translations(piece: Piece, goal: Piece) -> List[Translation]:
+    pmin, pmax = bounding_box([piece])
+    gmin, gmax = bounding_box([goal])
+
+    # Generate all possible combinations of translations and rotations
+    tx = list(range(gmin[0] - pmin[0], gmax[0] - pmax[0] + 1))
+    ty = list(range(gmin[1] - pmin[1], gmax[1] - pmax[1] + 1))
+    tz = list(range(gmin[2] - pmin[2], gmax[2] - pmax[2] + 1))
+
+    return [Translation(pos) for pos in itertools.product(tx, ty, tz)]
+
+
+def find_orientations(piece: Piece, target: Piece) -> List[Piece]:
+    """
+    Generates all possible orientations of a piece such that it is contained in a given target.
+
+    Args:
+        piece (Piece): A piece.
+        target (Piece): A target piece.
+
+    Returns:
+        List[Piece]: A list of all possible orientations of the piece inside the target piece.
+    """
+
+    # Apply all possible combinations of translations and rotations to the object
+    orientations = []
+    for rotated_piece in rotated_pieces(piece):
+        for translate in find_translations(rotated_piece, target):
+            translated_piece = [translate(pos) for pos in rotated_piece]
+            if is_sub_piece(translated_piece, target):
+                orientations.append(translated_piece)
+
+    assert len(unique_orientations(orientations)) == len(orientations)
+    return orientations
+
+
 def main():
     cmdline_parser = argparse.ArgumentParser()
     cmdline_parser.add_argument('--pieces', type=str, help='A file containing pieces. Each line contains a piece')
@@ -158,6 +446,7 @@ def main():
     cmdline_parser.add_argument('--output', type=str, help='A filename')
     cmdline_parser.add_argument('--draw', help='Draws the pieces to the given output file', action='store_true')
     cmdline_parser.add_argument('--solve', help='Solves a puzzle. The specified pieces are fitted into the goal', action='store_true')
+    cmdline_parser.add_argument('--transform', help='Draws the transformed pieces to the given output file', action='store_true')
     args = cmdline_parser.parse_args()
 
     if args.draw:
@@ -178,6 +467,17 @@ def main():
 
     if args.solve:
         print('Solving is not implemented yet')
+
+    if args.transform:
+        colors = parse_colors(COLORS)
+        pieces = load_pieces(args.pieces)
+        goal = load_pieces(args.goal)[0]
+        for i, piece in enumerate(pieces):
+            transformed_pieces = find_orientations(piece, goal)
+            text = make_vrml(transformed_pieces, colors)
+            filename = f'piece{i}.wrl'
+            print(f"Saving {len(transformed_pieces)} piece orientations to file '{filename}'")
+            Path(filename).write_text(text)
 
 
 if __name__ == '__main__':
