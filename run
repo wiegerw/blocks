@@ -2,4 +2,9 @@ python3 blocks.py --make-cube="4x4x4" --output="goals/4x4x4.txt"
 python3 blocks.py --make-cube="4x4x5" --output="goals/4x4x5.txt"
 python3 blocks.py --draw --pieces="goals/4x4x4.txt" --output="4x4x4.wrl"
 python3 blocks.py --draw --pieces="goals/4x4x5.txt" --output="4x4x5.wrl"
+
 python3 blocks.py --draw --pieces="pieces/11pieces.txt" --output="11pieces.wrl"
+python3 blocks.py --solve --pieces="pieces/11pieces.txt" --goal="goals/4x4x4.txt"
+
+python3 blocks.py --draw --pieces="pieces/split_cube.txt" --output="split_cube.wrl"
+python3 blocks.py --solve --pieces="pieces/split_cube.txt" --goal="goals/4x4x5.txt"

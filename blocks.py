@@ -62,6 +62,12 @@ def parse_pieces(text: str) -> List[Piece]:
     # Split the text into a list of lines
     lines = text.strip().split('\n')
 
+    # Remove comments
+    lines = [line for line in lines if not line.startswith('#')]
+
+    # Remove empty lines
+    lines = [line for line in lines if line.strip()]
+
     # Split each line into a list of color values, convert them to integers, and group them into blocks
     pieces = [[tuple(map(int, lines[i].split()[j:j + 3])) for j in range(0, len(lines[i].split()), 3)] for i in range(len(lines))]
 
