@@ -171,6 +171,8 @@ def main():
         X, Y, Z = map(int, args.make_cube.split('x'))
         positions = [f'{x} {y} {z}' for (x, y, z) in cube_positions(X, Y, Z)]
         text = '   '.join(positions)
+        if not args.output:
+            args.output = f'goals/{args.make_cube}.txt'
         print(f"Saving {args.make_cube} cube to file '{args.output}'")
         Path(args.output).write_text(text)
 
