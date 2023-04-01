@@ -2,9 +2,9 @@
 
 import argparse
 import itertools
-import math
 from pathlib import Path
 from typing import List, Tuple
+from z3 import *
 
 
 # type definitions
@@ -210,6 +210,7 @@ class Translation(object):
     def __call__(self, p: Position) -> Position:
         x, y, z = self.translation
         return p[0] + x, p[1] + y, p[2] + z
+
 
 class Rotation1(Transformation):
     def __call__(self, p: Position) -> Position:
@@ -440,6 +441,30 @@ def find_orientations(piece: Piece, target: Piece) -> List[Piece]:
     return orientations
 
 
+def solve_puzzle(pieces: List[Piece], goal: Piece):
+    def var(pos: Position):
+        x, y, z = pos
+        return Int(f'x_{x}_{y}_{z}')
+
+    variables = [var(pos) for pos in goal]
+
+    constraints = [And(0 <= x, x < len(pieces)) for x in variables]
+    for i, piece in enumerate(pieces):
+        orientations = find_orientations(piece, goal)
+        constraints.append(Or([And([var(pos) == i for pos in orientation]) for orientation in orientations]))
+
+    print('--- variables ---')
+    print('\n'.join(map(str, variables)), '\n')
+
+    solver = Solver()
+    solver.add(constraints)
+    if solver.check() == sat:
+        print('--- solution ---')
+        model = solver.model()
+        for x in variables:
+            print(f'{x} = {model.evaluate(x)}')
+
+
 def main():
     cmdline_parser = argparse.ArgumentParser()
     cmdline_parser.add_argument('--pieces', type=str, help='A file containing pieces. Each line contains a piece')
@@ -468,7 +493,9 @@ def main():
         Path(args.output).write_text(text)
 
     if args.solve:
-        print('Solving is not implemented yet')
+        pieces = load_pieces(args.pieces)
+        goal = load_pieces(args.goal)[0]
+        solve_puzzle(pieces, goal)
 
     if args.transform:
         colors = parse_colors(COLORS)
