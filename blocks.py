@@ -219,145 +219,145 @@ class Translation(object):
 class Rotation1(Transformation):
     def __call__(self, p: Position) -> Position:
         x, y, z = p
-        return -x, -y, z
+        return (z, -y, x)
 
 
 class Rotation2(Transformation):
     def __call__(self, p: Position) -> Position:
         x, y, z = p
-        return -x, y, -z
+        return (x, z, -y)
 
 
 class Rotation3(Transformation):
     def __call__(self, p: Position) -> Position:
         x, y, z = p
-        return x, -y, -z
+        return (-x, -y, z)
 
 
 class Rotation4(Transformation):
     def __call__(self, p: Position) -> Position:
         x, y, z = p
-        return x, y, z
+        return (-z, x, -y)
 
 
 class Rotation5(Transformation):
     def __call__(self, p: Position) -> Position:
         x, y, z = p
-        return -x, -z, -y
+        return (-z, -x, y)
 
 
 class Rotation6(Transformation):
     def __call__(self, p: Position) -> Position:
         x, y, z = p
-        return -x, z, y
+        return (y, -z, -x)
 
 
 class Rotation7(Transformation):
     def __call__(self, p: Position) -> Position:
         x, y, z = p
-        return x, -z, y
+        return (x, -z, y)
 
 
 class Rotation8(Transformation):
     def __call__(self, p: Position) -> Position:
         x, y, z = p
-        return x, z, -y
+        return (-y, -x, -z)
 
 
 class Rotation9(Transformation):
     def __call__(self, p: Position) -> Position:
         x, y, z = p
-        return -y, -x, z
+        return (-x, y, -z)
 
 
 class Rotation10(Transformation):
     def __call__(self, p: Position) -> Position:
         x, y, z = p
-        return -y, x, -z
+        return (y, z, x)
 
 
 class Rotation11(Transformation):
     def __call__(self, p: Position) -> Position:
         x, y, z = p
-        return y, -x, -z
+        return (x, y, z)
 
 
 class Rotation12(Transformation):
     def __call__(self, p: Position) -> Position:
         x, y, z = p
-        return y, x, z
+        return (-y, z, -x)
 
 
 class Rotation13(Transformation):
     def __call__(self, p: Position) -> Position:
         x, y, z = p
-        return -y, -z, -x
+        return (-y, x, z)
 
 
 class Rotation14(Transformation):
     def __call__(self, p: Position) -> Position:
         x, y, z = p
-        return -y, z, x
+        return (z, y, -x)
 
 
 class Rotation15(Transformation):
     def __call__(self, p: Position) -> Position:
         x, y, z = p
-        return y, -z, x
+        return (y, -x, z)
 
 
 class Rotation16(Transformation):
     def __call__(self, p: Position) -> Position:
         x, y, z = p
-        return y, z, -x
+        return (-z, -y, -x)
 
 
 class Rotation17(Transformation):
     def __call__(self, p: Position) -> Position:
         x, y, z = p
-        return -z, -x, -y
+        return (y, x, -z)
 
 
 class Rotation18(Transformation):
     def __call__(self, p: Position) -> Position:
         x, y, z = p
-        return -z, x, y
+        return (x, -y, -z)
 
 
 class Rotation19(Transformation):
     def __call__(self, p: Position) -> Position:
         x, y, z = p
-        return z, -x, y
+        return (-x, z, y)
 
 
 class Rotation20(Transformation):
     def __call__(self, p: Position) -> Position:
         x, y, z = p
-        return z, x, -y
+        return (-z, y, x)
 
 
 class Rotation21(Transformation):
     def __call__(self, p: Position) -> Position:
         x, y, z = p
-        return -z, -y, x
+        return (-y, -z, x)
 
 
 class Rotation22(Transformation):
     def __call__(self, p: Position) -> Position:
         x, y, z = p
-        return -z, y, -x
+        return (z, x, y)
 
 
 class Rotation23(Transformation):
     def __call__(self, p: Position) -> Position:
         x, y, z = p
-        return z, -y, -x
+        return (z, -x, -y)
 
 
 class Rotation24(Transformation):
     def __call__(self, p: Position) -> Position:
         x, y, z = p
-        return z, y, x
+        return (-x, -z, -y)
 
 
 def rotation_group() -> List[Transformation]:
@@ -500,7 +500,7 @@ def main():
         colors = parse_colors(COLORS)
         text = make_vrml(pieces, colors)
         if not args.output:
-            args.output = f'{Path(args.pieces).stem}.wrl'
+            args.output = f'{Path(args.pieces).stem}-pieces.wrl'
         print(f"Saving pieces to file '{args.output}'")
         Path(args.output).write_text(text)
 
