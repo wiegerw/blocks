@@ -1,3 +1,4 @@
 python3 blocks.py --make-cube="4x4x4"
-python3 blocks.py --transform --pieces="pieces/11pieces.txt" --goal="goals/4x4x4.txt"
+python3 blocks.py --transform --pieces="pieces/hexomino_3d.txt" --goal="goals/4x4x4.txt"
 python3 blocks.py --transform --pieces="pieces/half_cube.txt" --goal="goals/4x4x4.txt"
+python3 blocks.py --transform --pieces="pieces/offroad_cube.txt" --goal="goals/4x4x4.txt"

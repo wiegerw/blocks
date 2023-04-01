@@ -1,4 +1,5 @@
-# https://nl.wikipedia.org/wiki/Tetromino
+# https://en.wikipedia.org/wiki/Tetromino
+# two sets of tetrominoes
 
 0 0 0   1 0 0   2 0 0   3 0 0
 0 0 0   1 0 0   0 1 0   1 1 0

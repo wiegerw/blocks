@@ -409,7 +409,6 @@ def find_translations(piece: Piece, goal: Piece) -> List[Translation]:
     pmin, pmax = bounding_box([piece])
     gmin, gmax = bounding_box([goal])
 
-    # Generate all possible combinations of translations and rotations
     tx = list(range(gmin[0] - pmin[0], gmax[0] - pmax[0] + 1))
     ty = list(range(gmin[1] - pmin[1], gmax[1] - pmax[1] + 1))
     tz = list(range(gmin[2] - pmin[2], gmax[2] - pmax[2] + 1))
@@ -441,7 +440,7 @@ def find_orientations(piece: Piece, target: Piece) -> List[Piece]:
     return orientations
 
 
-def solve_puzzle(pieces: List[Piece], goal: Piece) -> Optional[List[Piece]]:
+def make_puzzle(pieces: List[Piece], goal: Piece):
     pieces_size = sum(len(piece) for piece in pieces)
     goal_size = len(goal)
     if pieces_size != goal_size:
@@ -459,6 +458,11 @@ def solve_puzzle(pieces: List[Piece], goal: Piece) -> Optional[List[Piece]]:
         orientations = find_orientations(piece, goal)
         constraints.append(Or([And([var(pos) == i for pos in orientation]) for orientation in orientations]))
 
+    return variables, constraints
+
+
+def solve_puzzle(pieces: List[Piece], goal: Piece) -> Optional[List[Piece]]:
+    variables, constraints = make_puzzle(pieces, goal)
     solver = Solver()
     solver.add(constraints)
     if solver.check() == sat:
@@ -470,6 +474,8 @@ def solve_puzzle(pieces: List[Piece], goal: Piece) -> Optional[List[Piece]]:
             print(f'{x} = {i}')
             solution[i].append(pos)
         return solution
+    else:
+        print('No solution possible')
     return None
 
 
@@ -481,6 +487,7 @@ def main():
     cmdline_parser.add_argument('--output', type=str, help='A filename')
     cmdline_parser.add_argument('--draw', help='Draws the pieces to the given output file', action='store_true')
     cmdline_parser.add_argument('--solve', help='Solves a puzzle. The specified pieces are fitted into the goal', action='store_true')
+    cmdline_parser.add_argument('--smt', help='Save the problem in .smt format', action='store_true')
     cmdline_parser.add_argument('--transform', help='Draws the transformed pieces to the given output file', action='store_true')
     args = cmdline_parser.parse_args()
 
@@ -488,6 +495,8 @@ def main():
         pieces = load_pieces(args.pieces)
         colors = parse_colors(COLORS)
         text = make_vrml(pieces, colors)
+        if not args.output:
+            args.output = f'{Path(args.pieces).stem}.wrl'
         print(f"Saving pieces to file '{args.output}'")
         Path(args.output).write_text(text)
 
@@ -499,6 +508,16 @@ def main():
             args.output = f'goals/{args.make_cube}.txt'
         print(f"Saving {args.make_cube} cube to file '{args.output}'")
         Path(args.output).write_text(text)
+
+    if args.smt:
+        pieces = load_pieces(args.pieces)
+        goal = load_pieces(args.goal)[0]
+        variables, constraints = make_puzzle(pieces, goal)
+        solver = Solver()
+        solver.add(constraints)
+        text = solver.to_smt2()
+        filename = f'{Path(args.pieces).stem}-{Path(args.goal).stem}.smt'
+        Path(filename).write_text(text)
 
     if args.solve:
         pieces = load_pieces(args.pieces)
