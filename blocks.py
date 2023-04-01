@@ -519,7 +519,7 @@ def main():
         for i, piece in enumerate(pieces):
             transformed_pieces = find_orientations(piece, goal)
             text = make_vrml(transformed_pieces, colors)
-            filename = f'piece{i}.wrl'
+            filename = f'{Path(args.pieces).stem}-{i}.wrl'
             print(f"Saving {len(transformed_pieces)} piece orientations to file '{filename}'")
             Path(filename).write_text(text)
 
