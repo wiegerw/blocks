@@ -3,7 +3,7 @@
 import argparse
 import itertools
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 from z3 import *
 
 
@@ -128,7 +128,7 @@ def bounding_box(pieces: List[Piece]) -> Tuple[Position, Position]:
     return (min_x, min_y, min_z), (max_x, max_y, max_z)
 
 
-def make_vrml(pieces: List[Piece], colors: List[RGB]) -> str:
+def make_vrml(pieces: List[Piece], colors: List[RGB], translate: bool = True) -> str:
     text = '''#VRML V2.0 utf8
 
 PROTO KUBUS [field SFVec3f translation 0 0 0 field SFColor color 1 0 0] {
@@ -136,7 +136,7 @@ Transform {
    translation IS translation
    children [
       Shape{geometry Box { size 0.9 0.9 0.9 } appearance Appearance{ material Material { diffuseColor IS color               }}}
-      Shape{geometry Box { size 1.0 1.0 1.0 } appearance Appearance{ material Material { diffuseColor 1 1 1 transparency 0.4 }}}
+      Shape{geometry Box { size 1.0 1.0 1.0 } appearance Appearance{ material Material { diffuseColor 1 1 1 transparency 0.9 }}}
    ]
 }}
 
@@ -151,7 +151,7 @@ Transform {
         name = f'BLOCK{i}'
         piece = pieces[i]
         color = colors[i % len(colors)]
-        translation = (size_x * (i % N), size_y * (i // N), 0)
+        translation = (size_x * (i % N), size_y * (i // N), 0) if translate else (0, 0, 0)
         return make_piece(name, piece, color, translation)
 
     return text + '\n\n'.join([piece(i) for i in range(len(pieces))])
@@ -441,7 +441,13 @@ def find_orientations(piece: Piece, target: Piece) -> List[Piece]:
     return orientations
 
 
-def solve_puzzle(pieces: List[Piece], goal: Piece):
+def solve_puzzle(pieces: List[Piece], goal: Piece) -> Optional[List[Piece]]:
+    pieces_size = sum(len(piece) for piece in pieces)
+    goal_size = len(goal)
+    if pieces_size != goal_size:
+        print('The size of the goal does not match with the pieces')
+        return None
+
     def var(pos: Position):
         x, y, z = pos
         return Int(f'x_{x}_{y}_{z}')
@@ -453,16 +459,18 @@ def solve_puzzle(pieces: List[Piece], goal: Piece):
         orientations = find_orientations(piece, goal)
         constraints.append(Or([And([var(pos) == i for pos in orientation]) for orientation in orientations]))
 
-    print('--- variables ---')
-    print('\n'.join(map(str, variables)), '\n')
-
     solver = Solver()
     solver.add(constraints)
     if solver.check() == sat:
         print('--- solution ---')
         model = solver.model()
-        for x in variables:
-            print(f'{x} = {model.evaluate(x)}')
+        solution = [list() for piece in pieces]
+        for pos, x in zip(goal, variables):
+            i = int(str(model.evaluate(x)))
+            print(f'{x} = {i}')
+            solution[i].append(pos)
+        return solution
+    return None
 
 
 def main():
@@ -495,7 +503,14 @@ def main():
     if args.solve:
         pieces = load_pieces(args.pieces)
         goal = load_pieces(args.goal)[0]
-        solve_puzzle(pieces, goal)
+        solution = solve_puzzle(pieces, goal)
+        if solution:
+            colors = parse_colors(COLORS)
+            text = make_vrml(solution, colors, False)
+            if not args.output:
+                args.output = f'{Path(args.pieces).stem}-{Path(args.goal).stem}.wrl'
+            print(f"Saving pieces to file '{args.output}'")
+            Path(args.output).write_text(text)
 
     if args.transform:
         colors = parse_colors(COLORS)

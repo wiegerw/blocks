@@ -1,2 +1,3 @@
 python3 blocks.py --make-cube="4x4x4"
 python3 blocks.py --transform --pieces="pieces/11pieces.txt" --goal="goals/4x4x4.txt"
+python3 blocks.py --transform --pieces="pieces/split_cube.txt" --goal="goals/4x4x5.txt"
