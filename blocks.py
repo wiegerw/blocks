@@ -547,7 +547,7 @@ def main():
             print(f"Saving solution to file '{args.output}'")
             Path(args.output).write_text(text)
 
-            filename = f'{Path(args.pieces).stem}-{Path(args.goal).stem}.txt'
+            filename = f'solutions/{Path(args.pieces).stem}-{Path(args.goal).stem}.txt'
             print(f"Saving solution coordinates to file '{filename}'")
             save_puzzle(solution, filename)
 
