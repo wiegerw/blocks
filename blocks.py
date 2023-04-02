@@ -483,6 +483,18 @@ def solve_puzzle(pieces: List[Piece], goal: Piece) -> Optional[List[Piece]]:
     return None
 
 
+def save_puzzle(pieces: List[Piece], filename: str) -> None:
+    def print_position(pos: Position) -> str:
+        x, y, z = pos
+        return f'{x} {y} {z}'
+
+    def print_piece(piece: Piece) -> str:
+        return '   '.join(print_position(pos) for pos in piece)
+
+    text = '\n'.join(print_piece(piece) for piece in pieces)
+    Path(filename).write_text(text)
+
+
 def main():
     cmdline_parser = argparse.ArgumentParser()
     cmdline_parser.add_argument('--pieces', type=str, help='A file containing pieces. Each line contains a piece')
@@ -532,8 +544,12 @@ def main():
             text = make_vrml(solution, colors, False)
             if not args.output:
                 args.output = f'{Path(args.pieces).stem}-{Path(args.goal).stem}.wrl'
-            print(f"Saving pieces to file '{args.output}'")
+            print(f"Saving solution to file '{args.output}'")
             Path(args.output).write_text(text)
+
+            filename = f'{Path(args.pieces).stem}-{Path(args.goal).stem}.txt'
+            print(f"Saving solution coordinates to file '{filename}'")
+            save_puzzle(solution, filename)
 
     if args.transform:
         colors = parse_colors(COLORS)

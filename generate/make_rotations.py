@@ -39,10 +39,10 @@ def compute_rotations(p: Point):
 
 if __name__ == '__main__':
     p = (Symbol('x'), Symbol('y'), Symbol('z'))
-    points = compute_rotations(p)
-    rotations = []
+    rotations = compute_rotations(p)
+    names = []
 
-    for i, rotation in enumerate(points):
+    for i, rotation in enumerate(rotations):
         text = '''class NAME(Transformation):
     def __call__(self, p: Position) -> Position:
         x, y, z = p
@@ -53,6 +53,6 @@ if __name__ == '__main__':
         text = text.replace('NAME', name)
         text = text.replace('ROTATION', str(rotation))
         print(text)
-        rotations.append(name)
+        names.append(name)
 
-    print(',\n            '.join(f'{name}()' for name in rotations))
+    print(',\n            '.join(f'{name}()' for name in names))
