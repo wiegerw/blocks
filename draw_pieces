@@ -1,5 +1,5 @@
-python3 blocks.py --draw --pieces="pieces/offroad_cube.txt"
-python3 blocks.py --draw --pieces="pieces/half_cube.txt"
-python3 blocks.py --draw --pieces="pieces/tetromino_2d.txt"
-python3 blocks.py --draw --pieces="pieces/pentomino.txt"
-python3 blocks.py --draw --pieces="pieces/hexomino_3d.txt"
+python3 blocks.py --draw --pieces="pieces/offroad_cube.txt" --grid
+python3 blocks.py --draw --pieces="pieces/half_cube.txt" --grid
+python3 blocks.py --draw --pieces="pieces/tetromino_2d.txt" --grid
+python3 blocks.py --draw --pieces="pieces/pentomino.txt" --grid
+python3 blocks.py --draw --pieces="pieces/hexomino_3d.txt" --grid

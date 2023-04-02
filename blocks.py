@@ -132,7 +132,7 @@ def bounding_box(pieces: List[Piece]) -> Tuple[Position, Position]:
     return (min_x, min_y, min_z), (max_x, max_y, max_z)
 
 
-def make_vrml(pieces: List[Piece], colors: List[RGB], translate: bool = True) -> str:
+def make_vrml(pieces: List[Piece], colors: List[RGB], scatter: bool = True) -> str:
     text = '''#VRML V2.0 utf8
 
 PROTO KUBUS [field SFVec3f translation 0 0 0 field SFColor color 1 0 0] {
@@ -155,7 +155,7 @@ Transform {
         name = f'BLOCK{i}'
         piece = pieces[i]
         color = colors[i % len(colors)]
-        translation = (size_x * (i % N), size_y * (i // N), 0) if translate else (0, 0, 0)
+        translation = (size_x * (i % N), size_y * (i // N), 0) if scatter else (0, 0, 0)
         return make_piece(name, piece, color, translation)
 
     return text + '\n\n'.join([piece(i) for i in range(len(pieces))])
@@ -501,7 +501,8 @@ def main():
     cmdline_parser.add_argument('--goal', type=str, help='A file containing the coordinates of a 3D object. It is the goal of a puzzle')
     cmdline_parser.add_argument('--make-cube', type=str, help="A string like '4x4x4'. Writes the positions of a cube to a file")
     cmdline_parser.add_argument('--output', type=str, help='A filename')
-    cmdline_parser.add_argument('--draw', help='Draws the pieces to the given output file', action='store_true')
+    cmdline_parser.add_argument('--draw', help='Draws the pieces in VRML format to the given output file', action='store_true')
+    cmdline_parser.add_argument('--grid', help='Scatters the pieces to a grid when drawing them', action='store_true')
     cmdline_parser.add_argument('--solve', help='Solves a puzzle. The specified pieces are fitted into the goal', action='store_true')
     cmdline_parser.add_argument('--smt', help='Save the problem in .smt format', action='store_true')
     cmdline_parser.add_argument('--transform', help='Draws the transformed pieces to the given output file', action='store_true')
@@ -510,7 +511,7 @@ def main():
     if args.draw:
         pieces = load_pieces(args.pieces)
         colors = parse_colors(COLORS)
-        text = make_vrml(pieces, colors)
+        text = make_vrml(pieces, colors, args.grid)
         if not args.output:
             args.output = f'{Path(args.pieces).stem}-pieces.wrl'
         print(f"Saving pieces to file '{args.output}'")
