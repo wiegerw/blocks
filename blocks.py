@@ -483,7 +483,7 @@ def solve_puzzle(pieces: List[Piece], goal: Piece) -> Optional[List[Piece]]:
     return None
 
 
-def save_puzzle(pieces: List[Piece], filename: str) -> None:
+def save_puzzle(path: Path, pieces: List[Piece]) -> None:
     def print_position(pos: Position) -> str:
         x, y, z = pos
         return f'{x} {y} {z}'
@@ -492,7 +492,13 @@ def save_puzzle(pieces: List[Piece], filename: str) -> None:
         return '   '.join(print_position(pos) for pos in piece)
 
     text = '\n'.join(print_piece(piece) for piece in pieces)
-    Path(filename).write_text(text)
+    path.write_text(text)
+
+
+def draw_pieces(path: Path, pieces: List[Piece], grid: bool):
+    colors = parse_colors(COLORS)
+    text = make_vrml(pieces, colors, grid)
+    path.write_text(text)
 
 
 def main():
@@ -510,12 +516,9 @@ def main():
 
     if args.draw:
         pieces = load_pieces(args.pieces)
-        colors = parse_colors(COLORS)
-        text = make_vrml(pieces, colors, args.grid)
-        if not args.output:
-            args.output = f'{Path(args.pieces).stem}-pieces.wrl'
-        print(f"Saving pieces to file '{args.output}'")
-        Path(args.output).write_text(text)
+        path = Path(args.pieces).with_suffix('.wrl')
+        print(f"Saving pieces to file '{path}'")
+        draw_pieces(path, pieces, args.grid)
 
     if args.make_cube:
         X, Y, Z = map(int, args.make_cube.split('x'))
@@ -533,35 +536,30 @@ def main():
         solver = Solver()
         solver.add(constraints)
         text = solver.to_smt2()
-        filename = f'{Path(args.pieces).stem}-{Path(args.goal).stem}.smt'
-        Path(filename).write_text(text)
+        path = Path(f'{Path(args.pieces).stem}-{Path(args.goal).stem}.smt')
+        print(f"Saving SMT formula to file '{path}'")
+        path.write_text(text)
 
     if args.solve:
         pieces = load_pieces(args.pieces)
         goal = load_pieces(args.goal)[0]
         solution = solve_puzzle(pieces, goal)
         if solution:
-            colors = parse_colors(COLORS)
-            text = make_vrml(solution, colors, False)
-            if not args.output:
-                args.output = f'{Path(args.pieces).stem}-{Path(args.goal).stem}.wrl'
-            print(f"Saving solution to file '{args.output}'")
-            Path(args.output).write_text(text)
-
-            filename = f'solutions/{Path(args.pieces).stem}-{Path(args.goal).stem}.txt'
-            print(f"Saving solution coordinates to file '{filename}'")
-            save_puzzle(solution, filename)
+            wrl_path = Path(args.output) if args.output else Path(f'{Path(args.pieces).stem}-{Path(args.goal).stem}.wrl')
+            print(f"Saving solution to file '{wrl_path}'")
+            draw_pieces(wrl_path, solution, False)
+            smt_path = wrl_path.with_suffix('.smt')
+            print(f"Saving solution coordinates to file '{smt_path}'")
+            save_puzzle(smt_path, solution)
 
     if args.transform:
-        colors = parse_colors(COLORS)
         pieces = load_pieces(args.pieces)
         goal = load_pieces(args.goal)[0]
         for i, piece in enumerate(pieces):
             transformed_pieces = find_orientations(piece, goal)
-            text = make_vrml(transformed_pieces, colors)
             filename = f'{Path(args.pieces).stem}-{i}.wrl'
             print(f"Saving {len(transformed_pieces)} piece orientations to file '{filename}'")
-            Path(filename).write_text(text)
+            draw_pieces(Path(filename), transformed_pieces, True)
 
 
 if __name__ == '__main__':
