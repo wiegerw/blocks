@@ -10,4 +10,4 @@ python3 blocks.py --solve --pieces="puzzles/pentomino.txt"    --goal="goals/3x20
 # 3D puzzles
 python3 blocks.py --solve --pieces="puzzles/offroad_cube.txt" --goal="goals/4x4x4.txt"
 python3 blocks.py --solve --pieces="puzzles/half_cube.txt"    --goal="goals/4x4x4.txt"
-python3 blocks.py --solve --pieces="puzzles/hexomino_3d.txt"  --goal="goals/4x4x4.txt"
+python3 blocks.py --solve --pieces="puzzles/hara_cube.txt"    --goal="goals/4x4x4.txt"

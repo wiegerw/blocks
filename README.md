@@ -63,21 +63,21 @@ solve.
 The option `--transform` can be used to compute and display all possible
 orientations of the pieces. For example the call
 ```
-python3 blocks.py --transform --pieces="puzzles/hexomino_3d.txt" --goal="goals/4x4x4.txt"
+python3 blocks.py --transform --pieces="puzzles/hara_cube.txt" --goal="goals/4x4x4.txt"
 ```
 results in the output
 ```
-Saving 144 piece orientations to file 'hexomino_3d-0.wrl'
-Saving 432 piece orientations to file 'hexomino_3d-1.wrl'
-Saving 432 piece orientations to file 'hexomino_3d-2.wrl'
-Saving 192 piece orientations to file 'hexomino_3d-3.wrl'
-Saving 432 piece orientations to file 'hexomino_3d-4.wrl'
-Saving 384 piece orientations to file 'hexomino_3d-5.wrl'
-Saving 144 piece orientations to file 'hexomino_3d-6.wrl'
-Saving 144 piece orientations to file 'hexomino_3d-7.wrl'
-Saving 288 piece orientations to file 'hexomino_3d-8.wrl'
-Saving 288 piece orientations to file 'hexomino_3d-9.wrl'
-Saving 324 piece orientations to file 'hexomino_3d-10.wrl'
+Saving 144 piece orientations to file 'hara_cube-0.wrl'
+Saving 432 piece orientations to file 'hara_cube-1.wrl'
+Saving 432 piece orientations to file 'hara_cube-2.wrl'
+Saving 192 piece orientations to file 'hara_cube-3.wrl'
+Saving 432 piece orientations to file 'hara_cube-4.wrl'
+Saving 384 piece orientations to file 'hara_cube-5.wrl'
+Saving 144 piece orientations to file 'hara_cube-6.wrl'
+Saving 144 piece orientations to file 'hara_cube-7.wrl'
+Saving 288 piece orientations to file 'hara_cube-8.wrl'
+Saving 288 piece orientations to file 'hara_cube-9.wrl'
+Saving 324 piece orientations to file 'hara_cube-10.wrl'
 ```
 These numbers give an indication of how complex the puzzle is.
 
@@ -92,8 +92,8 @@ SMT solver.
 ## Acknowledgements
 
 Thanks to Huub van de Wetering for providing the visualizations of the
-puzzles, and thanks to Alex Uuldriks for handing me a hexomino 3D puzzle
-and challenging me to solve it.
+puzzles, and thanks to Alex Uuldriks for handing me Hara's Diabolical Cube
+puzzle and challenging me to solve it.
 
 ## Links to puzzles
 
