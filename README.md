@@ -24,6 +24,10 @@ a piece. Hence, a line consists of triples of integer values.
 The `pieces` directory contains examples of some puzzles.
 The `goals` directory contains targets of the puzzles. 
 
+## Requirements
+
+The Python package `z3-solver` must be installed, see https://pypi.org/project/z3-solver/.
+
 ## Using the script
 
 The pieces of a puzzle can be visualized using calls like this:
