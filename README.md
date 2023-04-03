@@ -7,19 +7,19 @@ block puzzles. An example of such a block puzzle is
 
 ## Features
 
-* Solve puzzles using the Z3 solver
-* Save puzzles in SMT format
-* Draw puzzles and solutions in VRML format. A WRL viewer is required to view them
+* Solve puzzles using the Z3 solver.
+* Save puzzles in SMT format.
+* Draw puzzles and solutions in VRML format. A WRL viewer is required to view them.
 
-Below the pieces of the half-cube puzzle are shown
+Below the pieces of the half-cube puzzle are shown.
 
 ![](images/half_cube.png)
 
 ## Puzzle format
 
 A puzzle is stored in a simple textual format. Each line contains a
-piece of the puzzle. A line contains the 3D coordinates of the cubes of
-a piece. Hence, a line consists of triples of integer values.
+piece of the puzzle. A piece consists of the 3D coordinates of the cubes
+of the piece. Hence, each line consists of triples of integer values.
 
 The `pieces` directory contains examples of some puzzles.
 The `goals` directory contains targets of the puzzles.
