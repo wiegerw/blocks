@@ -22,7 +22,13 @@ piece of the puzzle. A line contains the 3D coordinates of the cubes of
 a piece. Hence, a line consists of triples of integer values.
 
 The `pieces` directory contains examples of some puzzles.
-The `goals` directory contains targets of the puzzles. 
+The `goals` directory contains targets of the puzzles.
+
+If you have additional puzzles, please send them to [wieger@10x10.org](mailto:wieger@10x10.org),
+so that I can add them to the repository. A puzzle consists of
+a text file with the coordinates of the pieces, a text file with
+the coordinates of the goal, a name of the puzzle, and possibly a
+link to a description of the puzzle.
 
 ## Requirements
 
@@ -79,9 +85,9 @@ SMT solver.
 
 ## Acknowledgements
 
-Thanks to Huub van de Wetering for providing the code for visualizing the
-puzzles, and to Alex Uuldriks for providing the puzzle that can
-be found in `pieces/hexomino_3d.txt`.
+Thanks to Huub van de Wetering for providing the visualizations of the
+puzzles, and thanks to Alex Uuldriks for handing me a hexomino 3D puzzle
+and challenging me to solve it.
 
 ## Links to puzzles
 
