@@ -1,19 +1,12 @@
-python3 blocks.py --make-cube="4x4x4"
-python3 blocks.py --make-cube="5x8x1"
-python3 blocks.py --make-cube="4x15x1"
-python3 blocks.py --make-cube="6x10x1"
-python3 blocks.py --make-cube="3x20x1"
-python3 blocks.py --make-cube="5x12x1"
-
 # 2D puzzles
-python3 blocks.py --solve --pieces="pieces/tetromino_2d.txt" --goal="goals/5x8x1.txt"
-python3 blocks.py --solve --pieces="pieces/pentomino.txt" --goal="goals/stairs.txt"
-python3 blocks.py --solve --pieces="pieces/pentomino.txt" --goal="goals/5x12x1.txt"
-python3 blocks.py --solve --pieces="pieces/pentomino.txt" --goal="goals/4x15x1.txt"
-python3 blocks.py --solve --pieces="pieces/pentomino.txt" --goal="goals/6x10x1.txt"
-python3 blocks.py --solve --pieces="pieces/pentomino.txt" --goal="goals/3x20x1.txt"
+python3 blocks.py --solve --pieces="puzzles/tetromino_2d.txt" --goal="goals/5x8x1.txt"
+python3 blocks.py --solve --pieces="puzzles/pentomino.txt"    --goal="goals/stairs.txt"
+python3 blocks.py --solve --pieces="puzzles/pentomino.txt"    --goal="goals/5x12x1.txt"
+python3 blocks.py --solve --pieces="puzzles/pentomino.txt"    --goal="goals/4x15x1.txt"
+python3 blocks.py --solve --pieces="puzzles/pentomino.txt"    --goal="goals/6x10x1.txt"
+python3 blocks.py --solve --pieces="puzzles/pentomino.txt"    --goal="goals/3x20x1.txt"
 
 # 3D puzzles
-python3 blocks.py --solve --pieces="pieces/offroad_cube.txt" --goal="goals/4x4x4.txt"
-python3 blocks.py --solve --pieces="pieces/half_cube.txt" --goal="goals/4x4x4.txt"
-python3 blocks.py --solve --pieces="pieces/hexomino_3d.txt" --goal="goals/4x4x4.txt"
+python3 blocks.py --solve --pieces="puzzles/offroad_cube.txt" --goal="goals/4x4x4.txt"
+python3 blocks.py --solve --pieces="puzzles/half_cube.txt"    --goal="goals/4x4x4.txt"
+python3 blocks.py --solve --pieces="puzzles/hexomino_3d.txt"  --goal="goals/4x4x4.txt"

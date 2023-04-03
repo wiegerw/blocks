@@ -6,9 +6,10 @@
 
 import argparse
 import itertools
+import math
 from pathlib import Path
 from typing import List, Optional, Tuple
-from z3 import *
+import z3
 
 
 # type definitions
@@ -453,23 +454,23 @@ def make_puzzle(pieces: List[Piece], goal: Piece):
 
     def var(pos: Position):
         x, y, z = pos
-        return Int(f'x_{x}_{y}_{z}')
+        return z3.Int(f'x_{x}_{y}_{z}')
 
     variables = [var(pos) for pos in goal]
 
-    constraints = [And(0 <= x, x < len(pieces)) for x in variables]
+    constraints = [z3.And(0 <= x, x < len(pieces)) for x in variables]
     for i, piece in enumerate(pieces):
         orientations = find_orientations(piece, goal)
-        constraints.append(Or([And([var(pos) == i for pos in orientation]) for orientation in orientations]))
+        constraints.append(z3.Or([z3.And([var(pos) == i for pos in orientation]) for orientation in orientations]))
 
     return variables, constraints
 
 
 def solve_puzzle(pieces: List[Piece], goal: Piece) -> Optional[List[Piece]]:
     variables, constraints = make_puzzle(pieces, goal)
-    solver = Solver()
+    solver = z3.Solver()
     solver.add(constraints)
-    if solver.check() == sat:
+    if solver.check() == z3.sat:
         print('--- solution ---')
         model = solver.model()
         solution = [list() for piece in pieces]
@@ -533,7 +534,7 @@ def main():
         pieces = load_pieces(args.pieces)
         goal = load_pieces(args.goal)[0]
         variables, constraints = make_puzzle(pieces, goal)
-        solver = Solver()
+        solver = z3.Solver()
         solver.add(constraints)
         text = solver.to_smt2()
         path = Path(f'{Path(args.pieces).stem}-{Path(args.goal).stem}.smt')
