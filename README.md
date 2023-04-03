@@ -8,8 +8,8 @@ block puzzles. An example of such a block puzzle is
 ## Features
 
 * Solve puzzles using the Z3 solver
-* Save the puzzles in SMT format
-* Draw pieces in VRML format. A WRL viewer is required to view them
+* Save puzzles in SMT format
+* Draw puzzles and solutions in VRML format. A WRL viewer is required to view them
 
 Below the pieces of the half-cube puzzle are shown
 
