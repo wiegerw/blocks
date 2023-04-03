@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Copyright 2023 Wieger Wesselink.
+# Copyright 2023 Wieger Wesselink + Huub van de Wetering.
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or http://www.boost.org/LICENSE_1_0.txt)
 
