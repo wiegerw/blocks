@@ -549,9 +549,9 @@ def main():
             wrl_path = Path(args.output) if args.output else Path(f'{Path(args.pieces).stem}-{Path(args.goal).stem}.wrl')
             print(f"Saving solution to file '{wrl_path}'")
             draw_pieces(wrl_path, solution, False)
-            smt_path = wrl_path.with_suffix('.smt')
-            print(f"Saving solution coordinates to file '{smt_path}'")
-            save_puzzle(smt_path, solution)
+            solution_path = wrl_path.with_suffix('.txt')
+            print(f"Saving solution coordinates to file '{solution_path}'")
+            save_puzzle(solution_path, solution)
 
     if args.transform:
         pieces = load_pieces(args.pieces)

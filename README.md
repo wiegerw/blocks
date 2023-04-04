@@ -92,7 +92,7 @@ SMT solver.
 ## Acknowledgements
 
 Thanks to Huub van de Wetering for providing the visualizations of the
-puzzles, and thanks to Alex Uuldriks for handing me Hara's Diabolical Cube
+puzzles, and thanks to Alex Uuldriks for handing me Hara's Cube
 puzzle and challenging me to solve it.
 
 ## Links to puzzles

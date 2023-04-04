@@ -8,6 +8,7 @@ python3 blocks.py --solve --pieces="puzzles/pentomino.txt"    --goal="goals/6x10
 python3 blocks.py --solve --pieces="puzzles/pentomino.txt"    --goal="goals/3x20x1.txt"
 
 # 3D puzzles
-python3 blocks.py --solve --pieces="puzzles/offroad_cube.txt" --goal="goals/4x4x4.txt"
-python3 blocks.py --solve --pieces="puzzles/half_cube.txt"    --goal="goals/4x4x4.txt"
-python3 blocks.py --solve --pieces="puzzles/hara_cube.txt"    --goal="goals/4x4x4.txt"
+python3 blocks.py --solve --pieces="puzzles/stand_up_soma_cube.txt" --goal="goals/3x3x3.txt"
+python3 blocks.py --solve --pieces="puzzles/offroad_cube.txt"       --goal="goals/4x4x4.txt"
+python3 blocks.py --solve --pieces="puzzles/half_cube.txt"          --goal="goals/4x4x4.txt"
+python3 blocks.py --solve --pieces="puzzles/hara_cube.txt"          --goal="goals/4x4x4.txt"
