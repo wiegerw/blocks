@@ -1,3 +1,4 @@
+python3 blocks.py --draw --pieces="puzzles/cubishmerhan.txt" --grid
 python3 blocks.py --draw --pieces="puzzles/half_cube.txt" --grid
 python3 blocks.py --draw --pieces="puzzles/hara_cube.txt" --grid
 python3 blocks.py --draw --pieces="puzzles/offroad_cube.txt" --grid
