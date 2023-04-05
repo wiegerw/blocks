@@ -133,7 +133,20 @@ def bounding_box(pieces: List[Piece]) -> Tuple[Position, Position]:
     return (min_x, min_y, min_z), (max_x, max_y, max_z)
 
 
-def make_vrml(pieces: List[Piece], colors: List[RGB], scatter: bool = True) -> str:
+def center_of_gravity(pieces: List[Piece]) -> Tuple[float, float, float]:
+    sum_x = 0
+    sum_y = 0
+    sum_z = 0
+    n = len(pieces)
+    for piece in pieces:
+        for (x, y, z) in piece:
+            sum_x += x
+            sum_y += y
+            sum_z += z
+    return sum_x / n, sum_y / n, sum_z / n
+
+
+def make_vrml(pieces: List[Piece], colors: List[RGB], grid: bool = True, scatter: float = 0) -> str:
     text = '''#VRML V2.0 utf8
 
 PROTO KUBUS [field SFVec3f translation 0 0 0 field SFColor color 1 0 0] {
@@ -148,15 +161,31 @@ Transform {
 '''
 
     (min_x, min_y, min_z), (max_x, max_y, max_z) = bounding_box(pieces)
+    (cx, cy, cz) = center_of_gravity(pieces)
     size_x = max_x - min_x + 2
     size_y = max_y - min_y + 2
     N = round(math.sqrt(len(pieces)))
+
+    def compute_scatter(piece):
+        (px, py, pz) = center_of_gravity([piece])
+        factor = math.sqrt((px - cx) * (px - cx) + (py - cy) * (py - cy) + (pz - cz) * (pz - cz))
+        if factor < 1e-5:
+            return 0, 0, 0
+        sx = scatter * (px - cx) / factor
+        sy = scatter * (py - cy) / factor
+        sz = scatter * (pz - cz) / factor
+        return sx, sy, sz
 
     def piece(i: int) -> str:
         name = f'BLOCK{i}'
         piece = pieces[i]
         color = colors[i % len(colors)]
-        translation = (size_x * (i % N), size_y * (i // N), 0) if scatter else (0, 0, 0)
+        if grid:
+            translation = (size_x * (i % N), size_y * (i // N), 0)
+        elif scatter:
+            translation = compute_scatter(piece)
+        else:
+            translation = (0, 0, 0)
         return make_piece(name, piece, color, translation)
 
     return text + '\n\n'.join([piece(i) for i in range(len(pieces))])
@@ -496,9 +525,9 @@ def save_puzzle(path: Path, pieces: List[Piece]) -> None:
     path.write_text(text)
 
 
-def draw_pieces(path: Path, pieces: List[Piece], grid: bool):
+def draw_pieces(path: Path, pieces: List[Piece], grid: bool, scatter: float = 0):
     colors = parse_colors(COLORS)
-    text = make_vrml(pieces, colors, grid)
+    text = make_vrml(pieces, colors, grid, scatter)
     path.write_text(text)
 
 
@@ -510,6 +539,7 @@ def main():
     cmdline_parser.add_argument('--output', type=str, help='A filename')
     cmdline_parser.add_argument('--draw', help='Draws the pieces in VRML format to the given output file', action='store_true')
     cmdline_parser.add_argument('--grid', help='Scatters the pieces to a grid when drawing them', action='store_true')
+    cmdline_parser.add_argument('--scatter', type=float, default=0, help='Moves the pieces away from the center of gravity')
     cmdline_parser.add_argument('--solve', help='Solves a puzzle. The specified pieces are fitted into the goal', action='store_true')
     cmdline_parser.add_argument('--smt', help='Save the problem in .smt format', action='store_true')
     cmdline_parser.add_argument('--transform', help='Draws the transformed pieces to the given output file', action='store_true')
@@ -519,7 +549,7 @@ def main():
         pieces = load_pieces(args.pieces)
         path = Path(args.pieces).with_suffix('.wrl')
         print(f"Saving pieces to file '{path}'")
-        draw_pieces(path, pieces, args.grid)
+        draw_pieces(path, pieces, args.grid, args.scatter)
 
     if args.make_cube:
         X, Y, Z = map(int, args.make_cube.split('x'))

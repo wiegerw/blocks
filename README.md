@@ -47,6 +47,12 @@ python3 blocks.py --draw --pieces="puzzles/half_cube.txt" --grid
 The option `--grid` puts the pieces in a 2 dimensional grid. This 
 is done to avoid collisions.
 
+The option `--scatter` is used to move pieces away from the center
+of gravity. This can be helpful to view a solution, as demonstrated in
+the picture below.
+
+![](images/offroad_cube-4x4x4.png)
+
 A solution of a puzzle can be drawn using a call like this:
 ```
 python3 blocks.py --draw --pieces="solutions/half_cube-4x4x4.txt"

@@ -19,4 +19,4 @@ if __name__ == '__main__':
 
     make_script('goals')
     make_script('puzzles', '--grid')
-    make_script('solutions')
+    make_script('solutions', '--scatter=0.5')

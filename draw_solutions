@@ -1,11 +1,11 @@
-python3 blocks.py --draw --pieces="solutions/cubishmerhan-4x4x4.txt" 
-python3 blocks.py --draw --pieces="solutions/half_cube-4x4x4.txt" 
-python3 blocks.py --draw --pieces="solutions/hara_cube-4x4x4.txt" 
-python3 blocks.py --draw --pieces="solutions/offroad_cube-4x4x4.txt" 
-python3 blocks.py --draw --pieces="solutions/pentomino-4x15x1.txt" 
-python3 blocks.py --draw --pieces="solutions/pentomino-5x12x1.txt" 
-python3 blocks.py --draw --pieces="solutions/pentomino-6x10x1.txt" 
-python3 blocks.py --draw --pieces="solutions/pentomino-chair.txt" 
-python3 blocks.py --draw --pieces="solutions/pentomino-stairs.txt" 
-python3 blocks.py --draw --pieces="solutions/stand_up_soma_cube-3x3x3.txt" 
-python3 blocks.py --draw --pieces="solutions/tetromino_2d-5x8x1.txt" 
+python3 blocks.py --draw --pieces="solutions/cubishmerhan-4x4x4.txt" --scatter=0.5
+python3 blocks.py --draw --pieces="solutions/half_cube-4x4x4.txt" --scatter=0.5
+python3 blocks.py --draw --pieces="solutions/hara_cube-4x4x4.txt" --scatter=0.5
+python3 blocks.py --draw --pieces="solutions/offroad_cube-4x4x4.txt" --scatter=0.5
+python3 blocks.py --draw --pieces="solutions/pentomino-4x15x1.txt" --scatter=0.5
+python3 blocks.py --draw --pieces="solutions/pentomino-5x12x1.txt" --scatter=0.5
+python3 blocks.py --draw --pieces="solutions/pentomino-6x10x1.txt" --scatter=0.5
+python3 blocks.py --draw --pieces="solutions/pentomino-chair.txt" --scatter=0.5
+python3 blocks.py --draw --pieces="solutions/pentomino-stairs.txt" --scatter=0.5
+python3 blocks.py --draw --pieces="solutions/stand_up_soma_cube-3x3x3.txt" --scatter=0.5
+python3 blocks.py --draw --pieces="solutions/tetromino_2d-5x8x1.txt" --scatter=0.5
