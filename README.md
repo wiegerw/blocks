@@ -9,7 +9,7 @@ block puzzles. An example of such a block puzzle is
 
 * Solve puzzles using the Z3 solver.
 * Save puzzles in SMT format.
-* Draw puzzles and solutions in VRML format. A WRL viewer is required to view them.
+* Draw puzzles and solutions in VRML format. A WRL viewer is required to view them. On Ubuntu, `view3dscene` can be used.
 
 Below the pieces of the half-cube puzzle are shown.
 
@@ -42,9 +42,9 @@ The Python package `z3-solver` must be installed, see https://pypi.org/project/z
 The option `--draw` is used to create `.wrl` files that can be viewed
 with a WRL viewer. The pieces of a puzzle can be drawn using a call like this:
 ```
-python3 blocks.py --draw --pieces="puzzles/half_cube.txt" --grid
+python blocks.py --draw --pieces="puzzles/half_cube.txt" --grid
 ```
-The option `--grid` puts the pieces in a 2 dimensional grid. This 
+The option `--grid` puts the pieces in a 2-dimensional grid. This 
 is done to avoid collisions.
 
 The option `--scatter` is used to move pieces away from the center
@@ -55,12 +55,12 @@ demonstrated in the picture below.
 
 A solution of a puzzle can be drawn using a call like this:
 ```
-python3 blocks.py --draw --pieces="solutions/offroad_cube-4x4x4.txt" --scatter=0.5
+python blocks.py --draw --pieces="solutions/offroad_cube-4x4x4.txt" --scatter=0.5
 ```
 
 A puzzle can be solved using a call like this:
 ```
-python3 blocks.py --solve --pieces="puzzles/offroad_cube.txt" --goal="goals/4x4x4.txt"
+python blocks.py --solve --pieces="puzzles/offroad_cube.txt" --goal="goals/4x4x4.txt"
 ```
 The input consists of a file containing the pieces of the puzzle, and a
 file containing the goal of the puzzle. Note that some puzzles may take a long time to
@@ -69,7 +69,7 @@ solve.
 The option `--transform` can be used to compute and display all possible
 orientations of the pieces. For example the call
 ```
-python3 blocks.py --transform --pieces="puzzles/hara_cube.txt" --goal="goals/4x4x4.txt"
+python blocks.py --transform --pieces="puzzles/hara_cube.txt" --goal="goals/4x4x4.txt"
 ```
 results in the output
 ```
@@ -90,7 +90,7 @@ These numbers give an indication of how complex the puzzle is.
 The option `--smt` is used to save the puzzle in `.smt` format. For
 example the call
 ```
-python3 blocks.py --smt --pieces="puzzles/offroad_cube.txt" --goal="goals/4x4x4.txt"
+python blocks.py --smt --pieces="puzzles/offroad_cube.txt" --goal="goals/4x4x4.txt"
 ```
 produces a file `offroad_cube-4x4x4.smt` that can be used as input for an
 SMT solver.

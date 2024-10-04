@@ -1,7 +1,8 @@
-python3 blocks.py --draw --pieces="puzzles/cubishmerhan.txt" --grid
-python3 blocks.py --draw --pieces="puzzles/half_cube.txt" --grid
-python3 blocks.py --draw --pieces="puzzles/hara_cube.txt" --grid
-python3 blocks.py --draw --pieces="puzzles/offroad_cube.txt" --grid
-python3 blocks.py --draw --pieces="puzzles/pentomino.txt" --grid
-python3 blocks.py --draw --pieces="puzzles/stand_up_soma_cube.txt" --grid
-python3 blocks.py --draw --pieces="puzzles/tetromino_2d.txt" --grid
+python blocks.py --draw --pieces="puzzles/cubishmerhan.txt" --grid
+python blocks.py --draw --pieces="puzzles/half_cube.txt" --grid
+python blocks.py --draw --pieces="puzzles/hara_cube.txt" --grid
+python blocks.py --draw --pieces="puzzles/offroad_cube.txt" --grid
+python blocks.py --draw --pieces="puzzles/pentomino.txt" --grid
+python blocks.py --draw --pieces="puzzles/stand_up_soma_cube.txt" --grid
+python blocks.py --draw --pieces="puzzles/tetromino_2d.txt" --grid
+python blocks.py --draw --pieces="puzzles/blue.txt" --grid
