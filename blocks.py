@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 # Copyright 2023 Wieger Wesselink + Huub van de Wetering.
 # Distributed under the Boost Software License, Version 1.0.
@@ -543,7 +543,17 @@ def main():
     cmdline_parser.add_argument('--solve', help='Solves a puzzle. The specified pieces are fitted into the goal', action='store_true')
     cmdline_parser.add_argument('--smt', help='Save the problem in .smt format', action='store_true')
     cmdline_parser.add_argument('--transform', help='Draws the transformed pieces to the given output file', action='store_true')
+    cmdline_parser.add_argument('--threads', type=int, default=1, help='The number of threads used for solving a puzzle')
     args = cmdline_parser.parse_args()
+
+    if args.threads > 1:
+        # https://github.com/Z3Prover/z3/issues/2207
+        # https://stackoverflow.com/questions/59113886/is-there-any-way-to-make-z3-use-multiple-cores-multithreaded-for-big-problems
+        # https://theory.stanford.edu/~nikolaj/programmingz3.html
+        # N.B. This does not seem to have any effect.
+        print(f'Setting the number of threads to {args.threads}')
+        z3.set_option('parallel.enable', True)
+        z3.set_option('parallel.threads.max', args.threads)
 
     if args.draw:
         pieces = load_pieces(args.pieces)
